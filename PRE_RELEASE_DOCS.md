@@ -20,6 +20,16 @@ Do not store raw diffs or line-number-only instructions here; prefer stable sect
 
 ## Unreleased
 
+### Default `Content-Type` ownership and explicit clearing
+
+- **Change:** Document how the default request `Content-Type` is chosen and how to suppress it.
+- **Source:** `PRE_RELEASE_CHANGELOG.md` Bug Fixes, Default `Content-Type` ownership.
+- **Status:** Pending.
+- **Docs targets:** `README.md` request-config/`headers` guidance and the "Using application/x-www-form-urlencoded format" section; migration or upgrade notes; translated docs after the English documentation is finalized.
+- **Required content:** Explain that the default `Content-Type` is derived from the actual body type by the default `transformRequest`: objects default to `application/json`, `URLSearchParams` and primitive bodies keep the historical `application/x-www-form-urlencoded` default for `post`/`put`/`patch`, `Blob`/`File` bodies default to their own `type`, and streams/`ArrayBuffer` bodies get no default. Explain that setting `headers: { 'Content-Type': undefined }` (or `null`/`false`) explicitly suppresses the header and is no longer refilled by the default, and that the placeholder `'Content-Type': undefined` entry no longer exists in `defaults.headers.common`.
+- **Examples:** Show a `Blob` with `type: 'text/csv'` sent with `Content-Type: text/csv` on both the `http` and `fetch` adapters, and a request with `headers: { 'Content-Type': undefined }` sending no `Content-Type`.
+- **Notes:** Present the removal of the blanket `application/x-www-form-urlencoded` default for binary bodies as a bug fix, not a breaking change; the React Native `FormData` set-then-clear behavior is unchanged.
+
 ### Runtime configuration prototype hardening
 
 - **Change:** Document the shared-prototype filtering applied to request config and interceptor replacements.
